@@ -13,11 +13,13 @@ type CategoryPillProps = {
 
 const CategoryPills = ({ categories, selectedCategory, setSelected }: CategoryPillProps) => {
 
-    const [isLeftVisible, setIsLeftVisible] = useState(true)
-    const [isRightVisible, setIsRightVisible] = useState(true)
+    const TRANSLATE_AMOUNT = 200
+    const [isLeftVisible, setIsLeftVisible] = useState(false)
+    const [isRightVisible, setIsRightVisible] = useState(false)
+    const [translate, setTranslate] = useState(500)
     return (
         <div className="overflow-x-hidden relative">
-            <div className="flex whitespace-nowrap gap-3 transition-transform w-[max-content]">
+            <div className="flex whitespace-nowrap gap-3 transition-transform w-[max-content]" style={{transform:`translateX(-${translate}px)`}}>
                 {/* whitespace no wrap dmama button wge ewa podi wen shring wenne ne */}
 
                 {categories.map(category => (
@@ -35,12 +37,24 @@ const CategoryPills = ({ categories, selectedCategory, setSelected }: CategoryPi
 
             {
                 isLeftVisible && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-full aspect-square p-1.5 bg-gradient-to-r from-white from-50% to-transparent w-24">
-                    <Button variant={"ghost"} size="icon" className=" h-full aspect-square w-auto p-1.5" ><ChevronLeft /></Button>
+                    <Button variant={"ghost"} size="icon" className=" h-full aspect-square w-auto p-1.5" onClick={()=> {
+                        setTranslate(translate => {
+                            const newTranslate = translate - TRANSLATE_AMOUNT;
+
+                            if(newTranslate<0)
+                                return 0
+                            else
+                                return newTranslate
+                        })
+                    }} >
+                        <ChevronLeft />
+                    </Button>
 
                 </div>
             }
+
             {
-                isRightVisible && <div className="absolute right-0 top-1/2 -translate-y-1/2 h-full aspect-square p-1.5 bg-gradient-to-l from-white from-50% to-transparent w-24">
+                isRightVisible && <div className="absolute right-0 top-1/2 -translate-y-1/2 h-full aspect-square p-1.5 bg-gradient-to-l from-white from-50% to-transparent w-24 flex justify-end ">
                     <Button variant={"ghost"} size="icon" className=" h-full aspect-square w-auto p-1.5" ><ChevronRight /></Button>
 
                 </div>
