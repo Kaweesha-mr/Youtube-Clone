@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 import CategoryPills from './components/CategoryPills'
-import { categories } from './data/Categories'
+import { categories,videos } from './data/Categories'
 import Header from './layout/PageHeader'
+import VideoGridItem from './components/VideoGridItem'
 
 function App() {
 
@@ -19,8 +20,20 @@ function App() {
           <div className='overflow-x-hidden px-8 pb-4'>
             <div className='sticky top-0 bg-white z-10 pb-4'>
               <CategoryPills categories={categories} selectedCategory={selected} setSelected={setSelected} />
+            </div>
+            
+
+            {/* this code line gives ability to auto align the grid layout insted of using sm md lg */}
+            <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+               
+                {
+                  videos.map(video => (
+                    <VideoGridItem key={video.id} {...video} />
+                  ))
+                }
 
             </div>
+
 
 
           </div>
