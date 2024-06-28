@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react"
 import ViewsFormater from "../utils/ViewsFormater"
 import formatDuration from "../utils/formatDuration"
 import { formatTimeAgo } from "../utils/formatTimeAgo"
@@ -30,8 +31,24 @@ const VideoGridItem = ({
     thumbnailUrl,
     videoUrl
 }: VideoGridItemProps) => {
+
+    const [isVideoPlaying,setIsVideoPlaying] = useState(false)
+    const videoRef = useRef<HTMLVideoElement>(null)
+
+
+    useEffect(() =>{
+        if(videoRef.current == null) return 
+
+        if(isVideoPlaying){
+            videoRef.current.currentTime=0;
+            videoRef.current.play()
+        }
+        else{
+            videoRef.current.pause();
+        }
+    })
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2" onMouseEnter={()=>{setIsVideoPlaying(true)}} onMouseLeave={()=>(setIsVideoPlaying(false))}>
             <a href={`/watch?v=${id}`} className="relative aspect-video">
                 <img src={thumbnailUrl}
                     className="block w-full h-full object-cover rounded-xl" />
@@ -39,6 +56,8 @@ const VideoGridItem = ({
                 <div className="absolute bottom-1 right-1 bg-secondary-dark text-secondary text-sm px-0.5 rounded">
                     {formatDuration(duration)}
                 </div>
+
+                <video ref={videoRef} muted playsInline className={`block h-full object-cover absolute inset-0 transition-opacity duration-200 ${isVideoPlaying?"opacity-100":"opacity-0"}`} src={videoUrl} />
             </a>
 
             <div className="flex gap-2">
